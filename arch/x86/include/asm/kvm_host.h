@@ -1034,6 +1034,8 @@ struct kvm_arch {
 	} msr_filter;
 
 	bool bus_lock_detection_enabled;
+	/* Guest can access the SGX PROVISIONKEY. */
+	bool sgx_provisioning_allowed;
 
 	struct kvm_pmu_event_filter *pmu_event_filter;
 	struct task_struct *nx_lpage_recovery_thread;
