@@ -3290,11 +3290,11 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
 	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
 	enum vm_entry_failure_code entry_failure_code;
 	bool evaluate_pending_interrupts;
+	u32 failed_index;
 	union vmx_exit_reason exit_reason = {
-		.basic = EXIT_REASON_INVALID_STATE,
+		.basic = -1,
 		.failed_vmentry = 1,
 	};
-	u32 failed_index;
 
 	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
 		kvm_vcpu_flush_tlb_current(vcpu);
@@ -5755,7 +5755,7 @@ static bool nested_vmx_l0_wants_exit(struct kvm_vcpu *vcpu,
 {
 	u32 intr_info;
 
-	switch ((u16)exit_reason.basic) {
+	switch (exit_reason.basic) {
 	case EXIT_REASON_EXCEPTION_NMI:
 		intr_info = vmx_get_intr_info(vcpu);
 		if (is_nmi(intr_info))
@@ -5820,7 +5820,7 @@ static bool nested_vmx_l1_wants_exit(struct kvm_vcpu *vcpu,
 	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
 	u32 intr_info;
 
-	switch ((u16)exit_reason.basic) {
+	switch (exit_reason.basic) {
 	case EXIT_REASON_EXCEPTION_NMI:
 		intr_info = vmx_get_intr_info(vcpu);
 		if (is_nmi(intr_info))
