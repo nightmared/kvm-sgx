@@ -12,6 +12,7 @@
 #include "driver.h"
 #include "encl.h"
 #include "encls.h"
+#include "virt.h"
 
 struct sgx_epc_section sgx_epc_sections[SGX_MAX_EPC_SECTIONS];
 static int sgx_nr_epc_sections;
@@ -714,7 +715,8 @@ static int __init sgx_init(void)
 		goto err_page_cache;
 	}
 
-	ret = sgx_drv_init();
+	/* Success if the native *or* virtual EPC driver initialized cleanly. */
+	ret = !!sgx_drv_init() & !!sgx_virt_epc_init();
 	if (ret)
 		goto err_kthread;
 
