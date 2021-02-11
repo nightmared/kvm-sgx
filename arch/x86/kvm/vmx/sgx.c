@@ -363,7 +363,7 @@ void setup_default_sgx_lepubkeyhash(void)
 	 * supported but disabled, then use the current MSR values as the hash
 	 * MSRs exist but are read-only (locked and not writable).
 	 */
-	if (!enable_sgx || !boot_cpu_has(X86_FEATURE_SGX_LC) ||
+	if (!enable_sgx || boot_cpu_has(X86_FEATURE_SGX_LC) ||
 	    rdmsrl_safe(MSR_IA32_SGXLEPUBKEYHASH0, &sgx_pubkey_hash[0])) {
 		sgx_pubkey_hash[0] = 0xa6053e051270b7acULL;
 		sgx_pubkey_hash[1] = 0x6cfbe8ba8b3b413dULL;
