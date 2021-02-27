@@ -749,13 +749,12 @@ static void __init sgx_init(void)
 	int i;
 
 	if (!cpu_feature_enabled(X86_FEATURE_SGX))
-		return -ENODEV;
+		return;
 
 	if (!sgx_page_cache_init())
-		return -ENOMEM;
+		return;
 
 	if (!sgx_page_reclaimer_init()) {
-		ret = -ENOMEM;
 		goto err_page_cache;
 	}
 
@@ -768,7 +767,7 @@ static void __init sgx_init(void)
 	if (ret)
 		goto err_provision;
 
-	return 0;
+	return;
 
 err_provision:
 	misc_deregister(&sgx_dev_provision);
@@ -781,8 +780,6 @@ err_page_cache:
 		vfree(sgx_epc_sections[i].pages);
 		memunmap(sgx_epc_sections[i].virt_addr);
 	}
-
-	return ret;
 }
 
 device_initcall(sgx_init);
